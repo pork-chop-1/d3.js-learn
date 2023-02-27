@@ -13,13 +13,17 @@
   // https://observablehq.com/@d3/lets-make-a-bar-chart
   data = [4, 8, 15, 16, 23, 42]
 
+  const x = d3.scaleLinear()
+    .domain([0, d3.max(data)])
+    .range([0, 620])
+
   const renderChart = () => {
     // 定义图表的容器
     const container = d3.create('div')
 
     container.style('text-align', 'right')
       .style('color', '#fff')
-      .style('font', '10px sans-serif')
+      .style('font', '16px sans-serif')
 
     // 定义空的条
     const bars = container.selectAll('div')
@@ -33,7 +37,7 @@
       .style('margin', '1px')
 
     // 传递一个函数，根据data确定宽度
-    barNew.style('width', d => `${d * 10}px`)
+    barNew.style('width', d => `${x(d)}px`)
 
     barNew.text(d => d)
 
