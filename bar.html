@@ -1,0 +1,183 @@
+<!doctype html>
+
+<meta charset="utf-8">
+<title>Dagre D3 Demo: Sentence Tokenization</title>
+
+<script src="https://cdn.bootcdn.net/ajax/libs/d3/7.8.2/d3.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/dagre-d3/0.6.4/dagre-d3.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/dagre/0.8.5/dagre.min.js"></script>
+
+
+<style id="css">
+  body {
+    width: 960px;
+    margin: 0 auto;
+    /* color: #333; */
+    font-weight: 300;
+    color: white;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serf;
+  }
+
+  h1 {
+    font-size: 3em;
+    font-weight: 300;
+  }
+
+  h2 {
+    font-size: 1.5em;
+    font-weight: 300;
+  }
+
+  section {
+    margin-bottom: 3em;
+  }
+
+  section p {
+    text-align: justify;
+  }
+
+  svg {
+    border: 1px solid #ccc;
+    overflow: hidden;
+    margin: 0 auto;
+  }
+
+  pre {
+    border: 1px solid #ccc;
+  }
+
+  /* This sets the color for "TK" nodes to a light blue green. */
+
+  g.type-suss>rect {
+    fill: #ddefd3;
+  }
+
+  .node text {
+    font-weight: 300;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serf;
+    font-size: 12px;
+    pointer-events: none;
+    text-anchor: middle;
+    fill: white;
+  }
+
+  .label g text tspan:last-child {
+    font-size: 10px;
+    margin-top: 5px;
+    dy: 1.5em;
+  }
+
+  .label g {
+    transform: translate(0, -13px);
+  }
+
+  .node rect {
+    fill: white;
+    stroke-width: 0px;
+    color: white;
+  }
+
+  .edgePath path {
+    stroke: rgb(78, 78, 78);
+    stroke-width: 1px;
+  }
+
+  g.type-init>rect {
+    fill: rgba(0, 91, 252, 0.4);
+  }
+
+  g.type-ready>rect {
+    fill: rgba(0, 91, 252, 0.6);
+  }
+
+  g.type-queue>rect {
+    fill: rgba(0, 91, 252, 0.8);
+  }
+
+  g.type-run>rect {
+    fill: rgba(0, 91, 252, 1);
+  }
+
+  g.type-suss>rect {
+    fill: #3EBB44;
+  }
+
+  g.type-fail>rect {
+    fill: #E93A3A;
+
+  }
+
+  g.type-freeze>rect {
+    fill: #f2f3f7;
+  }
+
+  .type-freeze text {
+    fill: #999999;
+  }
+
+  #myMenu {
+    position: absolute;
+    display: none;
+    width: 100px;
+    height: 100px;
+    background: #999999;
+  }
+</style>
+
+<svg id="svgCanvas" width=960 height=900></svg>
+<ul id="myMenu">
+  <li>xx</li>
+  <li>xx</li>
+</ul>
+
+<script id="js">
+let dataset ={
+  nodes: [
+    {id: 0,label: "流动人员",shape: "rect"},
+    {id: 1,label: "安全筛查",shape: "rect"},
+    {id: 2,label: "热像仪人体测温筛查",shape: "diamond"},
+    {id: 3,label: "人工复测",shape: "diamond"},
+    {id: 4,label: "快速通过",shape: "rect"},
+    {id: 5,label: "紧急处理",shape: "rect"}
+   ],
+   edges: [
+     {source: 0,target: 1,label: ""},
+     {source: 1,target: 2,label: ""},
+     {source: 2,target: 4,label: "正常"},
+     {source: 2,target: 3,label: "不正常"},
+     {source: 3,target: 5,label: "不正常"},
+     {source: 3,target: 4,label: "正常"}
+   ]
+}
+
+// 创建 graph 对象
+let g = new dagreD3.graphlib.Graph();
+//设置图
+g.setGraph({
+ rankdir:'TB'
+});
+dataset.nodes.forEach(item => {
+    g.setNode(item.id, {
+      //节点标签
+      label: item.label,
+      //节点形状
+      shape: item.shape,
+      //节点样式
+       style: "fill:#fff;stroke:#000"
+      })
+ })
+dataset.edges.forEach(item => {
+     g.setEdge(item.source,item.target, {
+        //边标签
+        label: item.label,
+        //边样式
+        style: "fill:#fff;stroke:#333;stroke-width:1.5px"
+      })
+  })
+// 创建渲染器
+let render = new dagreD3.render();
+// 选择 svg 并添加一个g元素作为绘图容器.
+let svgGroup = d3.select('#svgCanvas').append('g');
+// 在绘图容器上运行渲染器生成流程图.
+render(svgGroup, g);
+</script>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  
+<script src="https://cdn.bootcdn.net/ajax/libs/d3/7.8.2/d3.min.js"></script>
+<script>
+  // https://observablehq.com/@d3/lets-make-a-bar-chart
+  data = [4, 8, 15, 16, 23, 42]
+
+  const renderChart = () => {
+    // 定义图表的容器
+    const container = d3.create('div')
+
+    container.style('text-align', 'right')
+      .style('color', '#fff')
+      .style('font', '10px sans-serif')
+
+    // 定义空的条
+    const bars = container.selectAll('div')
+    // 绑定数据
+    const barUpdate = bars.data(data)
+    // 添加数据条
+    const barNew = barUpdate.join('div')
+
+    barNew.style('background', '#2d9afc')
+      .style('padding', '3px')
+      .style('margin', '1px')
+
+    // 传递一个函数，根据data确定宽度
+    barNew.style('width', d => `${d * 10}px`)
+
+    barNew.text(d => d)
+
+    return container.node()
+
+  }
+
+  // render
+  document.body.appendChild(renderChart())
+</script>
+</body>
+</html>
